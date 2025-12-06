@@ -1,14 +1,6 @@
 from .button import Button, ButtonOptions, TextOptions
-from .camera import Camera2D, CameraGroup, Camera2DOptions
+from .camera import Camera2D, Camera2DOptions, CameraGroup
 from .menu import Menu
-from .sprite import (
-    Animation,
-    AnimationOptions,
-    GameSprite,
-    SpriteOptions,
-    SpriteSheet,
-    SpriteSheetOptions,
-)
 from .physics import (
     Physics2DSettings,
     PhysicsController2D,
@@ -16,6 +8,14 @@ from .physics import (
     PhysicsObject2DSettings,
     PhysicsSurface2D,
     PhysicsSurface2DSettings,
+)
+from .sprite import (
+    Animation,
+    AnimationOptions,
+    GameSprite,
+    SpriteOptions,
+    SpriteSheet,
+    SpriteSheetOptions,
 )
 
 __all__ = [

@@ -1,8 +1,9 @@
 import dataclasses
 from typing import List
 
-import pygame
 import pygame.extensions.dps.core as pgcore
+
+import pygame
 
 from . import types
 

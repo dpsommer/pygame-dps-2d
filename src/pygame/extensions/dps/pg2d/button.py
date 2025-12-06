@@ -1,11 +1,11 @@
 import dataclasses
 from typing import Callable
 
-import pygame
 import pygame.extensions.dps.core as pgcore
 
-from . import types
-from . import sprite
+import pygame
+
+from . import sprite, types
 
 
 @dataclasses.dataclass

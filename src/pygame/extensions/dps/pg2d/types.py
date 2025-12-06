@@ -1,7 +1,8 @@
 from typing import Any, List, Protocol
 
-import pygame
 from pygame.extensions.dps.core import types
+
+import pygame
 
 Coordinate = types.Coordinate
 ColorValue = types.ColorValue

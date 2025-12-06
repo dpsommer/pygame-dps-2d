@@ -1,11 +1,11 @@
 import dataclasses
 from typing import List, Tuple, TypeVar
 
-import pygame
 import pygame.extensions.dps.core as pgcore
 
-from . import types
-from . import common
+import pygame
+
+from . import common, types
 
 
 @dataclasses.dataclass
@@ -34,7 +34,7 @@ class Camera2D:
         y = -self.follow.rect.centery + (h / 2)
         return x, y
 
-    def _reset(self):
+    def reset(self):
         self.pos.update(self._follow_centered())
 
 

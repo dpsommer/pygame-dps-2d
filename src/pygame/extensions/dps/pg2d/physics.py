@@ -2,8 +2,9 @@ import dataclasses
 import math
 from typing import List, Type
 
-import pygame
 import pygame.extensions.dps.core as pgcore
+
+import pygame
 
 from . import common, types
 
@@ -38,8 +39,8 @@ class PhysicsSurface2DSettings(PhysicsObject2DSettings):
     # static friction coefficient with all other
     # objects to avoid overcomplexity
     friction_coefficient: float = 0.8
-    restitution_coefficient: float = .0
-    incline: float = .0
+    restitution_coefficient: float = 0.0
+    incline: float = 0.0
 
 
 # PhysicsObject2D is the lowest-level free-body physics object in 2 dimensions
@@ -81,7 +82,7 @@ class PhysicsObject2D(pgcore.Loadable, common.GameObject2D):
             o (RigidBody2D): the overlapping RigidBody object
         """
         overlap = o.rect.clip(self.rect)
-        magnitude = overlap.w ** 2 + overlap.h ** 2
+        magnitude = overlap.w**2 + overlap.h**2
         fix_vector = o.velocity.rotate(180).normalize() * magnitude
         o.rect.move_ip(fix_vector)
 
@@ -123,7 +124,9 @@ class PhysicsSurface2D(PhysicsObject2D):
         # friction should be a vector opposite the net force
         friction = net_force.rotate(180).normalize() * self.friction_coefficient
         # the force of friction cannot exceed the net force on the object
-        return pygame.Vector2(min(net_force.x, friction.x), min(net_force.y, friction.y))
+        return pygame.Vector2(
+            min(net_force.x, friction.x), min(net_force.y, friction.y)
+        )
 
     def impact(self, o: PhysicsObject2D):
         super().impact(o)
@@ -162,7 +165,7 @@ class PhysicsController2D(pgcore.Loadable):
         for i, o in enumerate(self._objects):
             o.apply_force(self._gravity_f)
 
-            remaining = self._objects[i+1:]
+            remaining = self._objects[i + 1 :]
             collisions = o.rect.collideobjectsall(remaining, key=lambda o: o.rect)
             for c in collisions:
                 if o.colliding(c):

@@ -1,9 +1,9 @@
 from typing import List
 
+import pygame.extensions.dps.core as pgcore
 from pygame.sprite import LayeredDirty
 
 import pygame
-import pygame.extensions.dps.core as pgcore
 
 from . import button
 
