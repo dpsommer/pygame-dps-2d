@@ -27,7 +27,7 @@ Issues = "https://github.com/dpsommer/pygame-dps-2d/issues"
 
 [tool.hatch]
 version.source = "vcs"
-build.hooks.vcs.version-file = "src/pygame/extensions/dps/2d/version.py"
+build.hooks.vcs.version-file = "src/pygame/extensions/dps/pg2d/version.py"
 
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
