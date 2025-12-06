@@ -10,7 +10,7 @@ from . import common, types
 
 
 @dataclasses.dataclass
-class Physics2DSettings(pgcore.Configurable):
+class PhysicsSettings(pgcore.Configurable):
     gravity: float
     # XXX: have this be a separate configurable value for simplicity
     terminal_velocity: float
@@ -26,7 +26,7 @@ class CollisionBox(pgcore.Configurable):
 
 
 @dataclasses.dataclass
-class PhysicsObject2DSettings(pgcore.Configurable):
+class PhysicsObjectSettings(pgcore.Configurable):
     # TODO: mass
     max_speed: float
     collision_box: CollisionBox
@@ -34,7 +34,7 @@ class PhysicsObject2DSettings(pgcore.Configurable):
 
 
 @dataclasses.dataclass
-class PhysicsSurface2DSettings(PhysicsObject2DSettings):
+class PhysicsSurfaceSettings(PhysicsObjectSettings):
     # XXX: treat each surface as having a single
     # static friction coefficient with all other
     # objects to avoid overcomplexity
@@ -44,11 +44,11 @@ class PhysicsSurface2DSettings(PhysicsObject2DSettings):
 
 
 # PhysicsObject2D is the lowest-level free-body physics object in 2 dimensions
-class PhysicsObject2D(pgcore.Loadable, common.GameObject2D):
+class PhysicsObject(pgcore.Loadable, common.GameObject):
 
-    settings_type: Type[PhysicsObject2DSettings] = PhysicsObject2DSettings
+    settings_type: Type[PhysicsObjectSettings] = PhysicsObjectSettings
 
-    def __init__(self, settings: PhysicsObject2DSettings, rect: pygame.Rect):
+    def __init__(self, settings: PhysicsObjectSettings, rect: pygame.Rect):
         super().__init__(rect)
 
         self.velocity = pygame.Vector2()
@@ -67,11 +67,11 @@ class PhysicsObject2D(pgcore.Loadable, common.GameObject2D):
         # if self.falling():
         #     force.x *= self._air_manoeuvring_coefficient
 
-    def impact(self, o: "PhysicsObject2D"):
+    def impact(self, o: "PhysicsObject"):
         self.fix_overlap(o)
         o.apply_force(self.velocity)
 
-    def fix_overlap(self, o: "PhysicsObject2D"):
+    def fix_overlap(self, o: "PhysicsObject"):
         """Move an overlapping object such that it no longer intersects.
 
         Magnitude of the vector is determined using Pythagorean theorem with
@@ -79,14 +79,14 @@ class PhysicsObject2D(pgcore.Loadable, common.GameObject2D):
         the inverted direction of impact.
 
         Args:
-            o (RigidBody2D): the overlapping RigidBody object
+            o (PhysicsObject): the overlapping physics object
         """
         overlap = o.rect.clip(self.rect)
         magnitude = overlap.w**2 + overlap.h**2
         fix_vector = o.velocity.rotate(180).normalize() * magnitude
         o.rect.move_ip(fix_vector)
 
-    def colliding(self, o: "PhysicsObject2D") -> bool:
+    def colliding(self, o: "PhysicsObject") -> bool:
         curr_x, curr_y = self.rect.topleft
         last_x, last_y = self.last_pos
 
@@ -106,11 +106,11 @@ class PhysicsObject2D(pgcore.Loadable, common.GameObject2D):
         self.last_pos = self.origin
 
 
-class PhysicsSurface2D(PhysicsObject2D):
+class PhysicsSurface(PhysicsObject):
 
-    settings_type: Type[PhysicsObject2DSettings] = PhysicsSurface2DSettings
+    settings_type: Type[PhysicsObjectSettings] = PhysicsSurfaceSettings
 
-    def __init__(self, settings: PhysicsSurface2DSettings, rect: pygame.Rect):
+    def __init__(self, settings: PhysicsSurfaceSettings, rect: pygame.Rect):
         super().__init__(settings, rect)
         self.incline = settings.incline
         self.friction_coefficient = settings.friction_coefficient
@@ -128,7 +128,7 @@ class PhysicsSurface2D(PhysicsObject2D):
             min(net_force.x, friction.x), min(net_force.y, friction.y)
         )
 
-    def impact(self, o: PhysicsObject2D):
+    def impact(self, o: PhysicsObject):
         super().impact(o)
         # collision with a surface is a special case - apply the normal vector
         # and force of friction based on the object's direction of movement
@@ -139,15 +139,15 @@ class PhysicsSurface2D(PhysicsObject2D):
         o.apply_force(self.friction(o.velocity))
 
 
-class PhysicsController2D(pgcore.Loadable):
+class PhysicsController(pgcore.Loadable):
 
-    settings_type: Type[Physics2DSettings] = Physics2DSettings
+    settings_type: Type[PhysicsSettings] = PhysicsSettings
 
-    def __init__(self, settings: Physics2DSettings) -> None:
+    def __init__(self, settings: PhysicsSettings) -> None:
         self._gravity = settings.gravity
         self._gravity_f = pygame.Vector2(0, self._gravity)
         self.terminal_velocity = settings.terminal_velocity
-        self._objects: List[PhysicsObject2D] = []
+        self._objects: List[PhysicsObject] = []
 
     @property
     def gravity(self) -> float:
@@ -158,7 +158,7 @@ class PhysicsController2D(pgcore.Loadable):
         self._gravity = g
         self._gravity_f.y = g
 
-    def add_physics_object(self, o: PhysicsObject2D):
+    def add_physics_object(self, o: PhysicsObject):
         self._objects.append(o)
 
     def update(self, dt: float):

@@ -1,13 +1,13 @@
 from .button import Button, ButtonOptions, TextOptions
-from .camera import Camera2D, Camera2DSettings, CameraGroup
+from .camera import Camera, CameraGroup, CameraSettings
 from .menu import Menu
 from .physics import (
-    Physics2DSettings,
-    PhysicsController2D,
-    PhysicsObject2D,
-    PhysicsObject2DSettings,
-    PhysicsSurface2D,
-    PhysicsSurface2DSettings,
+    PhysicsController,
+    PhysicsObject,
+    PhysicsObjectSettings,
+    PhysicsSettings,
+    PhysicsSurface,
+    PhysicsSurfaceSettings,
 )
 from .sprite import (
     Animation,
@@ -23,17 +23,17 @@ __all__ = [
     "AnimationOptions",
     "Button",
     "ButtonOptions",
-    "Camera2D",
-    "Camera2DSettings",
+    "Camera",
+    "CameraSettings",
     "CameraGroup",
     "GameSprite",
     "Menu",
-    "Physics2DSettings",
-    "PhysicsController2D",
-    "PhysicsObject2D",
-    "PhysicsObject2DSettings",
-    "PhysicsSurface2D",
-    "PhysicsSurface2DSettings",
+    "PhysicsSettings",
+    "PhysicsController",
+    "PhysicsObject",
+    "PhysicsObjectSettings",
+    "PhysicsSurface",
+    "PhysicsSurfaceSettings",
     "SpriteOptions",
     "SpriteSheet",
     "SpriteSheetOptions",

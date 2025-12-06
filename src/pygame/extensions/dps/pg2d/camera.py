@@ -9,15 +9,15 @@ from . import common, types
 
 
 @dataclasses.dataclass
-class Camera2DSettings(pgcore.Configurable):
+class CameraSettings(pgcore.Configurable):
     smoothing: float = 0.05
 
 
-class Camera2D(pgcore.Loadable):
+class Camera(pgcore.Loadable):
 
-    settings_type: Type[Camera2DSettings] = Camera2DSettings
+    settings_type: Type[CameraSettings] = CameraSettings
 
-    def __init__(self, settings: Camera2DSettings, follow: common.GameObject2D):
+    def __init__(self, settings: CameraSettings, follow: common.GameObject):
         self.smoothing = settings.smoothing
         self.origin = self._follow_centered()
         self.follow = follow
@@ -47,7 +47,7 @@ T = TypeVar("T", bound=types.SpriteSupportsCamera)
 class CameraGroup(pygame.sprite.AbstractGroup[T]):
 
     def __init__(
-        self, *sprites: T, camera: Camera2D, background: pygame.Surface | None = None
+        self, *sprites: T, camera: Camera, background: pygame.Surface | None = None
     ):
         super().__init__(*sprites)
         self.camera = camera

@@ -2,8 +2,8 @@ import pygame
 
 
 # common class for 2D game objects
-# XXX: flesh this out
-class GameObject2D:
+# XXX: flesh this out. should it be moved to core?
+class GameObject:
 
     def __init__(self, rect: pygame.Rect):
         self.origin = rect.topleft
