@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List, Tuple, TypeVar
+from typing import List, Tuple, Type, TypeVar
 
 import pygame.extensions.dps.core as pgcore
 
@@ -9,23 +9,26 @@ from . import common, types
 
 
 @dataclasses.dataclass
-class Camera2DOptions(pgcore.Configurable):
-    pass
+class Camera2DSettings(pgcore.Configurable):
+    smoothing: float = 0.05
 
 
-class Camera2D:
+class Camera2D(pgcore.Loadable):
 
-    def __init__(self, opts: Camera2DOptions, follow: common.GameObject2D):
+    settings_type: Type[Camera2DSettings] = Camera2DSettings
+
+    def __init__(self, settings: Camera2DSettings, follow: common.GameObject2D):
+        self.smoothing = settings.smoothing
+        self.origin = self._follow_centered()
         self.follow = follow
-        x, y = self._follow_centered()
-        self.pos = pygame.Vector2(x, y)
+        self.pos = pygame.Vector2(self.origin)
 
-    def update(self):
+    def update(self, dt: float):
         # rect.center is the draw point relative to the screen;
         # we need to follow, ie. self.x should trend towards
         # follow.rect.centerx + window_width / 2
         x, y = self._follow_centered()
-        self.pos += (pygame.Vector2((x, y)) - self.pos) * 0.05
+        self.pos += (pygame.Vector2((x, y)) - self.pos) * self.smoothing * dt
         # TODO: clamp x/y values to background bounds
 
     def _follow_centered(self) -> Tuple[float, float]:
@@ -35,7 +38,7 @@ class Camera2D:
         return x, y
 
     def reset(self):
-        self.pos.update(self._follow_centered())
+        self.pos.update(self.origin)
 
 
 T = TypeVar("T", bound=types.SpriteSupportsCamera)

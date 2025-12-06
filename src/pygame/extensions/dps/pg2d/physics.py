@@ -161,7 +161,7 @@ class PhysicsController2D(pgcore.Loadable):
     def add_physics_object(self, o: PhysicsObject2D):
         self._objects.append(o)
 
-    def update(self, td: float):
+    def update(self, dt: float):
         for i, o in enumerate(self._objects):
             o.apply_force(self._gravity_f)
 
@@ -176,7 +176,7 @@ class PhysicsController2D(pgcore.Loadable):
             o.velocity.y = min(o.velocity.y, self.terminal_velocity)
             # store last position for collision detection
             o.last_pos = o.rect.topleft
-            o.rect.move_ip(o.velocity * td)
+            o.rect.move_ip(o.velocity * dt)
 
     def reset(self):
         for o in self._objects:

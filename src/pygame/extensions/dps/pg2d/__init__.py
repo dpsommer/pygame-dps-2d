@@ -1,5 +1,5 @@
 from .button import Button, ButtonOptions, TextOptions
-from .camera import Camera2D, Camera2DOptions, CameraGroup
+from .camera import Camera2D, Camera2DSettings, CameraGroup
 from .menu import Menu
 from .physics import (
     Physics2DSettings,
@@ -24,7 +24,7 @@ __all__ = [
     "Button",
     "ButtonOptions",
     "Camera2D",
-    "Camera2DOptions",
+    "Camera2DSettings",
     "CameraGroup",
     "GameSprite",
     "Menu",
