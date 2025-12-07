@@ -17,7 +17,7 @@ classifiers = [
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 dynamic = ["version"]
-dependencies = ["pygame-dps-core>=0.1.4"]
+dependencies = ["pygame-dps-core>=0.1.5"]
 
 [project.urls]
 Homepage = "https://github.com/dpsommer/pygame-dps-2d"
