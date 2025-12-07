@@ -65,7 +65,7 @@ class PlatformerSprite(GameSprite):
         self._inverted_image = pygame.transform.flip(self.image, True, False)
         self.inverted = False
 
-    def update(self, dt: float):
+    def update(self):
         self.image = self._inverted_image if self.inverted else self._original_image
 
     def reset(self):
