@@ -42,7 +42,7 @@ class Menu(pgcore.Scene):
             for button in self.buttons:
                 button.hovered = button.rect.collidepoint(event.pos)
 
-    def tick(self, dt: float):
+    def update(self, dt: float):
         pass  # noop
 
     def dirty_all_sprites(self):
