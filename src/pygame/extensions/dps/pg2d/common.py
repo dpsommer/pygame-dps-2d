@@ -10,5 +10,8 @@ class GameObject:
         self.original_size = rect.size
         self.rect = rect
 
+    def update(self, dt: float):
+        pass
+
     def reset(self):
         self.rect.update(self.origin, self.original_size)

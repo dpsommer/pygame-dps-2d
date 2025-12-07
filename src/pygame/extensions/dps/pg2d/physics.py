@@ -63,9 +63,6 @@ class PhysicsObject(pgcore.Loadable, common.GameObject):
     def apply_force(self, force: pygame.Vector2):
         if not self.is_static:
             self.velocity += force
-        # TODO: air "resistance" for horizontal movement
-        # if self.falling():
-        #     force.x *= self._air_manoeuvring_coefficient
 
     def impact(self, o: "PhysicsObject"):
         self.fix_overlap(o)
@@ -158,11 +155,12 @@ class PhysicsController(pgcore.Loadable):
         self._gravity = g
         self._gravity_f.y = g
 
-    def add_physics_object(self, o: PhysicsObject):
-        self._objects.append(o)
+    def add_physics_objects(self, *o: PhysicsObject):
+        self._objects.extend(o)
 
     def update(self, dt: float):
         for i, o in enumerate(self._objects):
+            o.update(dt)
             o.apply_force(self._gravity_f)
 
             remaining = self._objects[i + 1 :]
@@ -172,7 +170,7 @@ class PhysicsController(pgcore.Loadable):
                     o.impact(c)
                     c.impact(o)
 
-            o.velocity.x = max(o.velocity.x, o.max_speed)
+            o.velocity.x = pygame.math.clamp(o.velocity.x, -o.max_speed, o.max_speed)
             o.velocity.y = min(o.velocity.y, self.terminal_velocity)
             # store last position for collision detection
             o.last_pos = o.rect.topleft
