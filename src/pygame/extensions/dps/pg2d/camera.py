@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List, Tuple, Type, TypeVar
+from typing import List, Tuple, TypeVar
 
 import pygame.extensions.dps.core as pgcore
 
@@ -9,16 +9,14 @@ from . import common, types
 
 
 @dataclasses.dataclass
-class CameraSettings(pgcore.Configurable):
+class CameraOptions(pgcore.Configurable):
     smoothing: float = 0.05
 
 
-class Camera(pgcore.Loadable):
+class Camera:
 
-    settings_type: Type[CameraSettings] = CameraSettings
-
-    def __init__(self, settings: CameraSettings, follow: common.GameObject):
-        self.smoothing = settings.smoothing
+    def __init__(self, opts: CameraOptions, follow: common.GameObject):
+        self.smoothing = opts.smoothing
         self.origin = self._follow_centered()
         self.follow = follow
         self.pos = pygame.Vector2(self.origin)
