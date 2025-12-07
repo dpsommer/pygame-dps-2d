@@ -33,7 +33,7 @@ class SpriteSheetOptions(pgcore.Configurable):
 
 class GameSprite(pygame.sprite.WeakDirtySprite):
 
-    def __init__(self, opts: SpriteOptions) -> None:
+    def __init__(self, opts: SpriteOptions):
         super().__init__()
         self._layer = opts.layer
         self.origin = opts.topleft
@@ -52,6 +52,25 @@ class GameSprite(pygame.sprite.WeakDirtySprite):
     def reset(self):
         self.rect.update(self.origin, self.source_rect.size)
         self.last_pos = self.rect.topleft
+
+
+class PlatformerSprite(GameSprite):
+
+    def __init__(self, opts: SpriteOptions):
+        if opts.image is None:
+            raise pygame.error("No image configured for character")
+
+        super().__init__(opts)
+        self._original_image = self.image
+        self._inverted_image = pygame.transform.flip(self.image, True, False)
+        self.inverted = False
+
+    def update(self, dt: float):
+        self.image = self._inverted_image if self.inverted else self._original_image
+
+    def reset(self):
+        super().reset()
+        self.inverted = False
 
 
 # TODO:
