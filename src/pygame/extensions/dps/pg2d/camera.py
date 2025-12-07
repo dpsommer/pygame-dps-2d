@@ -17,8 +17,8 @@ class Camera:
 
     def __init__(self, opts: CameraOptions, follow: common.GameObject):
         self.smoothing = opts.smoothing
-        self.origin = self._follow_centered()
         self.follow = follow
+        self.origin = self._follow_centered()
         self.pos = pygame.Vector2(self.origin)
 
     def update(self, dt: float):
