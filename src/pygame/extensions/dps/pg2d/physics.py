@@ -28,7 +28,6 @@ class CollisionBox(pgcore.Configurable):
 @dataclasses.dataclass
 class PhysicsObjectSettings(pgcore.Configurable):
     # TODO: mass
-    max_speed: float
     collision_box: CollisionBox
     is_static: bool = False
 
@@ -52,7 +51,6 @@ class PhysicsObject(pgcore.Loadable, common.GameObject):
         super().__init__(rect)
 
         self.velocity = pygame.Vector2()
-        self.max_speed = settings.max_speed
         self.collision_box = settings.collision_box
         self.is_static = settings.is_static
         self.last_pos: types.Coordinate = self.rect.topleft
@@ -170,7 +168,6 @@ class PhysicsController(pgcore.Loadable):
                     o.impact(c)
                     c.impact(o)
 
-            o.velocity.x = pygame.math.clamp(o.velocity.x, -o.max_speed, o.max_speed)
             o.velocity.y = min(o.velocity.y, self.terminal_velocity)
             # store last position for collision detection
             o.last_pos = o.rect.topleft
