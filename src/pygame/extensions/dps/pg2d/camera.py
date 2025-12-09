@@ -26,7 +26,7 @@ class Camera:
         # we need to follow, ie. self.x should trend towards
         # follow.rect.centerx + window_width / 2
         x, y = self._follow_centered()
-        self.pos += (pygame.Vector2((x, y)) - self.pos) * self.smoothing * dt
+        self.pos += (pygame.Vector2((x, y)) - self.pos) * self.smoothing * (1 + dt)
         # TODO: clamp x/y values to background bounds
 
     def _follow_centered(self) -> Tuple[float, float]:
